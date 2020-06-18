@@ -244,8 +244,9 @@ object turno{
 	var property atacando = false
 	method turnoProta(){
 		var runPer
+		var haveTry = true
 		game.say(prota,"mi turno")
-		keyboard.u().onPressDo{runPer = 0.randomUpTo(100).roundUp() if (runPer<70)principal.inicio() else game.say(prota,("miss"))}
+		keyboard.u().onPressDo{runPer = 0.randomUpTo(100).roundUp() if ((runPer<70) and (haveTry)) {inicioLobby.inicio() haveTry=true} else game.say(prota,("miss")) haveTry=false}
 		keyboard.p().onPressDo{if ((prota.stamina()>=20) and (self.turnoDe()=="prota") and not atacando)
 							  {atacando = true prota.pelear(enemigo1) prota.stamina(prota.stamina()-20)
 							  //--------Actualizacion de stamina------------------------------------------------------------//			
@@ -257,8 +258,8 @@ object turno{
 							  	
 							   if(enemigo1.vida()<=0){game.onTick(4100,"Ganar",{=>game.say(prota,"gane") prota.monedas(prota.monedas()+4) prota.earnXp()})}
 							   game.say(prota,prota.stamina().toString())}}
-		keyboard.o().onPressDo{	if (self.turnoDe()=="prota"){prota.defender()self.turnoDe("enemigo")self.turnoEnem()}}
-		keyboard.i().onPressDo{	if (self.turnoDe()=="prota"){prota.stamina(prota.staminaMax()) enemigo1.resistencia(0)
+		keyboard.o().onPressDo{	if (self.turnoDe()=="prota"){prota.defender() haveTry=true self.turnoDe("enemigo")self.turnoEnem()}}
+		keyboard.i().onPressDo{	if (self.turnoDe()=="prota"){prota.stamina(prota.staminaMax()) haveTry=true enemigo1.resistencia(0)
 							 //--------Actualizacion de stamina------------------------------------------------------------//			
 							 game.removeVisual(barraStaminaProta)
 							 barraStaminaProta.cuantaStamina(prota)
