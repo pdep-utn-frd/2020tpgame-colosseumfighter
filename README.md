@@ -7,6 +7,7 @@ Juego de lucha PvE RPG en el cual encarnas a un gladiador que lucha por su liber
 Lucha en la arena contra enemigo generados aleatoreamente.
 Sube de nivel para mejorar tus estadsticas de Fuerza y agilidad, compra mejoras de arma en la tienda para una mayor ventaja en batalla
 
+![](assets Miselaneos/helpMenu.pgn)
 
 ### Acerca de:
 
