@@ -29,7 +29,7 @@ object prota{
 		
 	method mejorarArma(){
 		if (monedas >= 10){
-			espada.danio(espada.danio()+90)
+			espada.danio(espada.danio()+6)
 			game.say(checkmark,"compraste")
 			self.monedas(self.monedas()-10)
 		}
