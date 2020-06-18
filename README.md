@@ -1,18 +1,16 @@
-# ¡A jugar! 
+# ¡Colloseum Fighter! 
 
 ## Juego realizado con la biblioteca Wollok Game
 
-![reemplazar por una animación del juego](https://d33wubrfki0l68.cloudfront.net/1ba3cf64b23a4ac786d7432121abbd782794730c/ce83b/documentacion/conceptos/images/wollokcharacter.gif)
-
 ### Resumen:
-
-
-### Instrucciones:
+Juego de lucha PvE RPG en el cual encarnas a un gladiador que lucha por su libertad.
+Lucha en la arena contra enemigo generados aleatoreamente.
+Sube de nivel para mejorar tus estadsticas de Fuerza y agilidad, compra mejoras de arma en la tienda para una mayor ventaja en batalla
 
 
 ### Acerca de:
 
-Autores:
+Autores: Leonardo Laniere
 
 Docente/Curso/Institución:
 
