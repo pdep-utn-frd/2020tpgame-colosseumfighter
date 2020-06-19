@@ -201,8 +201,8 @@ object creator {
 		var property clave
 		var property num
 		var property arma
-		var property fuerza
-		var property agilidad
+		var property fuerza 
+		var property agilidad 
 		
 	method newEnem(){
 		self.clave(["Golem","Ogre"].anyOne())
