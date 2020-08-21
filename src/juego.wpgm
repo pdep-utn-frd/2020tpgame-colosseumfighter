@@ -5,4 +5,4 @@ import tableros.*
 program ejemplo{
 	principal.inicio()
 	game.start()
-}	
+}
