@@ -7,48 +7,52 @@ import tableros.*
 //--------------------------------------------------visuales-vida----------------------------------------------------------//
 class BarraVida {
 
-	var property image
+	var property image = "hp bar 50 of 50.png"
 	var property number = 100
-	var property position
+	var property position = game.at(2, 2)
+	const property persona
 
-	method cuantaVida(persona) {
+	method cuantaVida() {
 		number = 50 - (persona.vida().div(2).roundUp())
 	}
 
-	method position(persona) {
+	method position() {
 		position = persona.position().right(3).up(1)
+		return position
 	}
 
 }
 
-const barraVidaProta = new BarraVida()
+const barraVidaProta = new BarraVida(persona = prota)
 
-const barraVidaE1 = new BarraVida()
+const barraVidaE1 = new BarraVida(persona = enemigo1)
 
 //--------------------------------------------------visuales-stamina----------------------------------------------------------//
 class BarraStamina {
 
-	var property image
+	var property image = "stamina-bar-50-of-50.png"
 	var property number = 50
-	var property position
+	var property position = game.at(2, 2)
+	const property persona
 
-	method porcentaje(personaje) {
-		return (personaje.stamina() * 100 / personaje.staminaMax()).roundUp(0)
+	method porcentaje() {
+		return (persona.stamina() * 100 / persona.staminaMax()).roundUp(0)
 	}
 
-	method cuantaStamina(personaje) {
-		number = 50 - (self.porcentaje(personaje) / 2)
+	method cuantaStamina() {
+		number = 50 - (self.porcentaje() / 2)
 	}
 
-	method position(persona) {
+	method position() {
 		position = persona.position().right(3)
+		return position
 	}
 
 }
 
-const barraStaminaProta = new BarraStamina()
+const barraStaminaProta = new BarraStamina(persona = prota)
 
-const barraStaminaE1 = new BarraStamina()
+const barraStaminaE1 = new BarraStamina(persona = enemigo1)
 
 //------------------------------------------------------------------------------------------------------------------------//
 object prota {
@@ -113,11 +117,11 @@ object prota {
 	}
 
 	method iniciarBarra() {
-		barName.cuantaVida(self)
+		barName.cuantaVida()
 		barName.position(self)
 		numberConverter.getNumberImage(barName.number().toString(), barName)
 		game.addVisual(barName)
-		barStaminaName.cuantaStamina(self)
+		barStaminaName.cuantaStamina()
 		barStaminaName.position(self)
 		numberConverterStamina.getNumberImage(barStaminaName.number().max(0).toString(), barStaminaName)
 		game.addVisual(barStaminaName)
@@ -138,7 +142,7 @@ object prota {
 			})
 //-------------------------------------Actualizacion de barra de vida-----------------------------------------------------//			
 			game.removeVisual(barraVidaE1)
-			barraVidaE1.cuantaVida(enemigo)
+			barraVidaE1.cuantaVida()
 			numberConverter.getNumberImage(barraVidaE1.number().max(0).toString(), barraVidaE1)
 			game.addVisual(barraVidaE1)
 //------------------------------------------------------------------------------------------------------------------------//
@@ -158,7 +162,7 @@ object prota {
 		self.stamina(self.stamina() + self.staminaMax() / 2)
 			// --------Actualizacion de stamina------------------------------------------------------------//			
 		game.removeVisual(barraStaminaProta)
-		barraStaminaProta.cuantaStamina(self)
+		barraStaminaProta.cuantaStamina()
 		numberConverterStamina.getNumberImage(barraStaminaProta.number().max(0).toString(), barraStaminaProta)
 		game.addVisual(barraStaminaProta)
 			// -------------------------------------------------------------------------------------------//
@@ -194,11 +198,11 @@ object enemigo1 {
 	}
 
 	method iniciarBarra() {
-		barName.cuantaVida(self)
+		barName.cuantaVida()
 		barName.position(self)
 		numberConverter.getNumberImage(barName.number().toString(), barName)
 		game.addVisual(barName)
-		barStaminaName.cuantaStamina(self)
+		barStaminaName.cuantaStamina()
 		barStaminaName.position(self)
 		numberConverterStamina.getNumberImage(barStaminaName.number().max(0).toString(), barStaminaName)
 		game.addVisual(barStaminaName)
@@ -223,7 +227,7 @@ object enemigo1 {
 			})
 //-------------------------------------actualizacion de barra de vida-----------------------------------------------------//			
 			game.removeVisual(barraVidaProta)
-			barraVidaProta.cuantaVida(enemigo)
+			barraVidaProta.cuantaVida()
 			numberConverter.getNumberImage(barraVidaProta.number().max(0).toString(), barraVidaProta)
 			game.addVisual(barraVidaProta)
 		} //------------------------------------------------------------------------------------------------------------------------//
@@ -244,7 +248,7 @@ object enemigo1 {
 		self.stamina(self.stamina() + self.staminaMax() / 2)
 			// --------Actualizacion de stamina------------------------------------------------------------//			
 		game.removeVisual(barStaminaName)
-		barraStaminaE1.cuantaStamina(self)
+		barraStaminaE1.cuantaStamina()
 		numberConverterStamina.getNumberImage(barStaminaName.number().max(0).toString(), barStaminaName)
 		game.addVisual(barraStaminaE1)
 			// -------------------------------------------------------------------------------------------//

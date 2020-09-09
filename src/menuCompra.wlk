@@ -263,7 +263,7 @@ object turno {
 				prota.stamina(prota.stamina() - 20)
 					// --------Actualizacion de stamina------------------------------------------------------------//			
 				game.removeVisual(barraStaminaProta)
-				barraStaminaProta.cuantaStamina(prota)
+				barraStaminaProta.cuantaStamina()
 				numberConverterStamina.getNumberImage(barraStaminaProta.number().max(0).toString(), barraStaminaProta)
 				game.addVisual(barraStaminaProta)
 					// -------------------------------------------------------------------------------------------//
@@ -290,7 +290,7 @@ object turno {
 				enemigo1.resistencia(0)
 					// --------Actualizacion de stamina------------------------------------------------------------//			
 				game.removeVisual(barraStaminaProta)
-				barraStaminaProta.cuantaStamina(prota)
+				barraStaminaProta.cuantaStamina()
 				numberConverterStamina.getNumberImage(barraStaminaProta.number().max(0).toString(), barraStaminaProta)
 				game.addVisual(barraStaminaProta)
 					// -------------------------------------------------------------------------------------------//
@@ -307,7 +307,7 @@ object turno {
 			enemigo1.stamina(enemigo1.stamina() - 20)
 				// --------Actualizacion de stamina------------------------------------------------------------//			
 			game.removeVisual(barraStaminaE1)
-			barraStaminaE1.cuantaStamina(enemigo1)
+			barraStaminaE1.cuantaStamina()
 			numberConverterStamina.getNumberImage(barraStaminaE1.number().max(0).toString(), barraStaminaE1)
 			game.addVisual(barraStaminaE1)
 				// -------------------------------------------------------------------------------------------// 	
@@ -343,7 +343,7 @@ object turno {
 				enemigo1.stamina(enemigo1.staminaMax())
 					// --------Actualizacion de stamina------------------------------------------------------------//			
 				game.removeVisual(barraStaminaE1)
-				barraStaminaE1.cuantaStamina(enemigo1)
+				barraStaminaE1.cuantaStamina()
 				numberConverterStamina.getNumberImage(barraStaminaE1.number().max(0).toString(), barraStaminaE1)
 				game.addVisual(barraStaminaE1)
 					// -------------------------------------------------------------------------------------------//
