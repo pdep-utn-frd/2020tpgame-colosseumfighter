@@ -34,11 +34,13 @@ object animator {
 	method sumarWalking(charact) {
 		self.timeW(self.timeW() + 1)
 		charact.position(charact.position().right(1))
-		charact.barName().posicion(charact)
+		charact.barName().position(charact)
+		charact.barStaminaName().position(charact)		
 		imageConverter.getNumberImage(charact, charact.num(), "Walking", self.timeW())
 		if (self.timeW() == 16) {
 			game.removeTickEvent("caminar")
-			charact.barName().posicion(charact)
+			charact.barName().position(charact)
+			charact.barStaminaName().position(charact)		
 			imageConverter.getNumberImage(charact, charact.num(), "Walking", 17)
 			self.timeW(0)
 		}
@@ -53,11 +55,13 @@ object animator {
 	method sumarWalkingL(charact) {
 		self.timeB(self.timeB() - 1)
 		charact.position(charact.position().left(1))
-		charact.barName().posicion(charact)
+		charact.barName().position(charact)
+		charact.barStaminaName().position(charact)		
 		imageConverter.getNumberImage(charact, charact.num(), "Walking", self.timeB())
 		if (self.timeB() == 1) {
 			game.removeTickEvent("backward")
-			charact.barName().posicion(charact)
+			charact.barName().position(charact)
+			charact.barStaminaName().position(charact)
 			imageConverter.getNumberImage(charact, charact.num(), "Walking", 17)
 			self.timeB(17)
 		}

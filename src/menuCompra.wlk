@@ -170,7 +170,7 @@ object reload {
 		game.removeVisual(tiendaG)
 		game.removeVisual(cartelT)
 		game.removeVisual(punteroTienda)
-		game.removeVisual(reload)
+		game.removeVisual(self)
 		game.removeVisual(checkmark)
 		inicioLobby.inicio()
 	}

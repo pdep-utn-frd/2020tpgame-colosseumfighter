@@ -64,7 +64,7 @@ object fLobby {
 	method teclas() {
 		keyboard.s().onPressDo{ inicioPelea.configurarPelea()}
 		keyboard.d().onPressDo{ inicioTienda.iniciar()
-			game.removeVisual(fLobby)
+			game.removeVisual(self)
 		}
 	}
 

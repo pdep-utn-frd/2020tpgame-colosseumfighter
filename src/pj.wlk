@@ -4,6 +4,52 @@ import animation.*
 import menuCompra.*
 import tableros.*
 
+//--------------------------------------------------visuales-vida----------------------------------------------------------//
+class BarraVida {
+
+	var property image
+	var property number = 100
+	var property position
+
+	method cuantaVida(persona) {
+		number = 50 - (persona.vida().div(2).roundUp())
+	}
+
+	method position(persona) {
+		position = persona.position().right(3).up(1)
+	}
+
+}
+
+const barraVidaProta = new BarraVida()
+
+const barraVidaE1 = new BarraVida()
+
+//--------------------------------------------------visuales-stamina----------------------------------------------------------//
+class BarraStamina {
+
+	var property image
+	var property number = 50
+	var property position
+
+	method porcentaje(personaje) {
+		return (personaje.stamina() * 100 / personaje.staminaMax()).roundUp(0)
+	}
+
+	method cuantaStamina(personaje) {
+		number = 50 - (self.porcentaje(personaje) / 2)
+	}
+
+	method position(persona) {
+		position = persona.position().right(3)
+	}
+
+}
+
+const barraStaminaProta = new BarraStamina()
+
+const barraStaminaE1 = new BarraStamina()
+
 //------------------------------------------------------------------------------------------------------------------------//
 object prota {
 
@@ -67,14 +113,14 @@ object prota {
 	}
 
 	method iniciarBarra() {
-		barraVidaProta.cuantaVida(self)
-		barraVidaProta.posicion(self)
-		numberConverter.getNumberImage(barraVidaProta.number().toString(), barraVidaProta)
-		game.addVisual(barraVidaProta)
-		barraStaminaProta.cuantaStamina(self)
-		barraStaminaProta.posicion(self)
-		numberConverterStamina.getNumberImage(barraStaminaProta.number().max(0).toString(), barraStaminaProta)
-		game.addVisual(barraStaminaProta)
+		barName.cuantaVida(self)
+		barName.position(self)
+		numberConverter.getNumberImage(barName.number().toString(), barName)
+		game.addVisual(barName)
+		barStaminaName.cuantaStamina(self)
+		barStaminaName.position(self)
+		numberConverterStamina.getNumberImage(barStaminaName.number().max(0).toString(), barStaminaName)
+		game.addVisual(barStaminaName)
 	}
 
 	method pelear(enemigo) {
@@ -130,8 +176,8 @@ object enemigo1 {
 	var property stamina = 40
 	var property staminaMax = 40
 	var property resistencia = 0
-	var property fuerza = 5
-	var property agilidad = 3
+	const property fuerza = 5
+	const property agilidad = 3
 	var danio = 0
 	var property position = game.at(24, 2)
 	const peso = 67
@@ -139,8 +185,8 @@ object enemigo1 {
 	var property clave = "Satyr"
 	var property num = "02"
 	var property image = "Satyr_02_Attacking_0.png"
-	var property barName = barraVidaE1
-	var property barAtaminaName = barraStaminaE1
+	const property barName = barraVidaE1
+	const property barStaminaName = barraStaminaE1
 
 	method recibirDanio(damage) {
 		vida = vida - ((damage - (damage * 0.01 * (self.agilidad() + self.resistencia())))).roundUp(0)
@@ -148,14 +194,14 @@ object enemigo1 {
 	}
 
 	method iniciarBarra() {
-		barraVidaE1.cuantaVida(self)
-		barraVidaE1.posicion(self)
-		numberConverter.getNumberImage(barraVidaE1.number().toString(), barraVidaE1)
-		game.addVisual(barraVidaE1)
-		barraStaminaE1.cuantaStamina(self)
-		barraStaminaE1.posicion(self)
-		numberConverterStamina.getNumberImage(barraStaminaE1.number().max(0).toString(), barraStaminaE1)
-		game.addVisual(barraStaminaE1)
+		barName.cuantaVida(self)
+		barName.position(self)
+		numberConverter.getNumberImage(barName.number().toString(), barName)
+		game.addVisual(barName)
+		barStaminaName.cuantaStamina(self)
+		barStaminaName.position(self)
+		numberConverterStamina.getNumberImage(barStaminaName.number().max(0).toString(), barStaminaName)
+		game.addVisual(barStaminaName)
 	}
 
 	method inicializar() {
@@ -197,9 +243,9 @@ object enemigo1 {
 	method defender() {
 		self.stamina(self.stamina() + self.staminaMax() / 2)
 			// --------Actualizacion de stamina------------------------------------------------------------//			
-		game.removeVisual(barraStaminaE1)
-		barraStaminaE1.cuantaStamina(enemigo1)
-		numberConverterStamina.getNumberImage(barraStaminaE1.number().max(0).toString(), barraStaminaE1)
+		game.removeVisual(barStaminaName)
+		barraStaminaE1.cuantaStamina(self)
+		numberConverterStamina.getNumberImage(barStaminaName.number().max(0).toString(), barStaminaName)
 		game.addVisual(barraStaminaE1)
 			// -------------------------------------------------------------------------------------------//
 		self.resistencia(self.resistencia() + 30)
@@ -207,14 +253,12 @@ object enemigo1 {
 	}
 
 }
-
+//-----------------------------------------------------------------------------------------------------------------------//
 object creator {
 
 	var property clave
 	var property num
 	var property arma
-	var property fuerza
-	var property agilidad
 
 	method newEnem() {
 		self.clave([ "Golem", "Ogre" ].anyOne())
@@ -230,51 +274,6 @@ object creator {
 
 }
 
-//--------------------------------------------------visuales-vida----------------------------------------------------------//
-class BarraVida {
-
-	var property image
-	var property number = 100
-	var property position
-
-	method cuantaVida(persona) {
-		number = 50 - (persona.vida().div(2).roundUp())
-	}
-
-	method posicion(persona) {
-		position = persona.position().right(3).up(1)
-	}
-
-}
-
-const barraVidaProta = new BarraVida()
-
-const barraVidaE1 = new BarraVida()
-
-//--------------------------------------------------visuales-stamina----------------------------------------------------------//
-class BarraStamina {
-
-	var property image
-	var property number = 50
-	var property position
-
-	method porcentaje(personaje) {
-		return (personaje.stamina() * 100 / personaje.staminaMax()).roundUp(0)
-	}
-
-	method cuantaStamina(personaje) {
-		number = 50 - (self.porcentaje(personaje) / 2)
-	}
-
-	method posicion(persona) {
-		position = persona.position().right(3)
-	}
-
-}
-
-const barraStaminaProta = new BarraStamina()
-
-const barraStaminaE1 = new BarraStamina()
 
 //------------------------------------------------------------------------------------------------------------------------//
 object imageConverter {
