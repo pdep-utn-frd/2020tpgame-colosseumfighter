@@ -26,7 +26,6 @@ class Modo {
 	
 	method moverPersonaje(charact){
 		time +=1
-        charact.position(charact.position().right(1))
 	}
 	
 }
@@ -48,31 +47,12 @@ object modoWalkingL inherits Modo(descripcion = "Walking", velocidad = 40, pasos
 }
 
 
-
 object modoAtacar inherits Modo(descripcion = "Attacking", velocidad = 65, pasos = 11, time=0,final=0)		
-
-	override method moverPersonaje(charact){
-    	time+=1
-        
-    }    
-}
-
 
 object modoHurt inherits Modo(descripcion = "hurt", velocidad = 60, pasos = 11, time=0,final=0)		
 
-	override method moverPersonaje(charact){
-    	time+=1
-        
-    }    
-}
-
-
 object modoDying inherits Modo(descripcion = "dying", velocidad = 60, pasos = 11, time=0,final=0)		
 
-	override method moverPersonaje(charact){
-    	time+=1
-        
-    }    
-}
+	
 
 
