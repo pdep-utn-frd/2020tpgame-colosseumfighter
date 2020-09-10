@@ -1,6 +1,6 @@
 import wollok.game.*
 import armas.*
-import animation.*
+import Animation2.*
 import menuCompra.*
 import tableros.*
 
@@ -135,7 +135,7 @@ object prota {
 			danio = (arma.danio() + self.fuerza()).roundUp()
 			enemigo.recibirDanio(danio)
 			enemigo.position(game.at(24, 2))
-			animator.attackActionR(self, self.contrincante())
+			accionConjDer.accion()
 			game.onTick(4100, "restriccion de ataque", {=>
 				turno.atacando(false)
 				game.removeTickEvent("restriccion de ataque")
@@ -147,7 +147,7 @@ object prota {
 			game.addVisual(barraVidaE1)
 //------------------------------------------------------------------------------------------------------------------------//
 		} else {
-			animator.attackActionR(self, self.contrincante())
+			accionConjDer.accion()
 			game.onTick(4100, "restriccion de ataque", {=>
 				turno.atacando(false)
 				game.removeTickEvent("restriccion de ataque")
@@ -220,7 +220,7 @@ object enemigo1 {
 			danio = (arma.danio() + self.fuerza()).roundUp()
 			enemigo.recibirDanio(danio)
 			prota.position(game.at(2, 2))
-			animator.attackActionL(self, self.enemigo())
+			accionConjizq.accion()
 			game.onTick(4100, "restriccion de ataque", {=>
 				turno.atacando(false)
 				game.removeTickEvent("restriccion de ataque")
@@ -232,7 +232,7 @@ object enemigo1 {
 			game.addVisual(barraVidaProta)
 		} //------------------------------------------------------------------------------------------------------------------------//
 		else {
-			animator.attackActionL(self, self.enemigo())
+			accionConjizq.accion()
 			game.onTick(4100, "restriccion de ataque", {=>
 				turno.atacando(false)
 				game.removeTickEvent("restriccion de ataque")
