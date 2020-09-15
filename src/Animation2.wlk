@@ -29,7 +29,7 @@ class Modo {
 		imageConverter.getNumberImage(charact, charact.num(), descripcion, self.time())
         if (self.time() == pasos) {
         	game.removeTickEvent(descripcion)
-			imageConverter.getNumberImage(charact, charact.num(), "Walking", 17)
+			imageConverter.getNumberImage(charact, charact.num(), "Walking", 4)
 			time = final
         }
     }

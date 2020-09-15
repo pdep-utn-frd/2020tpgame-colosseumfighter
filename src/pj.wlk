@@ -1,8 +1,18 @@
 import wollok.game.*
-import armas.*
 import Animation2.*
 import menuCompra.*
 import tableros.*
+
+//--------------------------------------------------Armas----------------------------------------------------------//
+
+class Arma {
+	var property danio = 10
+	const property peso = 2
+}
+
+const espada = new Arma (danio = 10, peso = 2)
+const manos= new Arma (danio = 5, peso= 0)
+const lanza = new Arma(danio = 15, peso =1.5)
 
 //--------------------------------------------------visuales-vida----------------------------------------------------------//
 class BarraVida {
@@ -60,8 +70,8 @@ object prota {
 	var property arma = espada
 	var property monedas = 12
 	var property peso = 65
-	var property stamina = 30
-	var property staminaMax = 30
+	var property stamina = 40
+	var property staminaMax = 40
 	var property vida = 100
 	var property resistencia = 0
 	var property fuerza = 5
@@ -136,7 +146,7 @@ object prota {
 			enemigo.recibirDanio(danio)
 			enemigo.position(game.at(24, 2))
 			accionConjDer.accion()
-			game.onTick(4100, "restriccion de ataque", {=>
+			game.onTick(3800, "restriccion de ataque", {=>
 				turno.atacando(false)
 				game.removeTickEvent("restriccion de ataque")
 			})
@@ -148,7 +158,7 @@ object prota {
 //------------------------------------------------------------------------------------------------------------------------//
 		} else {
 			accionConjDer.accion()
-			game.onTick(4100, "restriccion de ataque", {=>
+			game.onTick(3800, "restriccion de ataque", {=>
 				turno.atacando(false)
 				game.removeTickEvent("restriccion de ataque")
 			})
@@ -303,4 +313,4 @@ object numberConverterStamina {
 	}
 
 }
-
+//------------------------------------------------------------------------------------------------------------------------//

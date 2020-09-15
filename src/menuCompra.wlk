@@ -1,6 +1,5 @@
 import wollok.game.*
 import pj.*
-import armas.*
 import tableros.*
 
 //-----------------------------------------------------Level-Up------------------------------------------------------------//
@@ -274,7 +273,6 @@ object turno {
 						prota.earnXp()
 					})
 				}
-				game.say(prota, prota.stamina().toString())
 			}
 		}
 		keyboard.o().onPressDo{ if (self.turnoDe() == "prota") {
@@ -302,8 +300,7 @@ object turno {
 
 	method turnoEnem() {
 		var defPer
-		game.say(enemigo1, "mi turno")
-		if ((enemigo1.stamina() >= 20) and (self.turnoDe() == "enemigo") and not atacando) {
+		if ((enemigo1.stamina() >= 20) and (self.turnoDe() == "enemigo") ) {
 			enemigo1.stamina(enemigo1.stamina() - 20)
 				// --------Actualizacion de stamina------------------------------------------------------------//			
 			game.removeVisual(barraStaminaE1)
@@ -316,12 +313,10 @@ object turno {
 					enemigo1.pelear()
 					if (prota.vida() <= 0) {
 						game.onTick(4100, "perder", {=>
-							game.say(enemigo1, "perdiste")
 							gameOver.muerte()
 						})
 					}
 				} else {
-					game.say(prota, "gane")
 					inicioLevelUp.iniciar()
 				} )
 				game.removeTickEvent("enemAttack")
