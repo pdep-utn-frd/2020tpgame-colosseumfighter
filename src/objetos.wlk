@@ -1,7 +1,7 @@
 import wollok.game.*
 import Animation2.*
-import menuCompra.*
-import tableros.*
+import pantallas.*
+import fondos.*
 
 //--------------------------------------------------Armas----------------------------------------------------------//
 

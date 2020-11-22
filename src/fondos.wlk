@@ -1,6 +1,6 @@
 import wollok.game.*
-import pj.*
-import menuCompra.*
+import objetos.*
+import pantallas.*
 
 object principal {
 

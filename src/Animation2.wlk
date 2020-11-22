@@ -1,5 +1,5 @@
 import wollok.game.*
-import pj.*
+import objetos.*
 
 
 

@@ -1,6 +1,6 @@
 import wollok.game.*
-import pj.*
-import tableros.*
+import objetos.*
+import fondos.*
 
 //-----------------------------------------------------Level-Up------------------------------------------------------------//
 object inicioLevelUp {
