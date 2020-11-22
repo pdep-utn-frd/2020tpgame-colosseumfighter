@@ -10,7 +10,7 @@ class Arma {
 	const property peso = 2
 }
 
-const espada = new Arma (danio = 150, peso = 2)
+const espada = new Arma (danio = 17, peso = 2)
 const manos= new Arma (danio = 5, peso= 0)
 const lanza = new Arma(danio = 15, peso =1.5)
 
@@ -22,7 +22,7 @@ class BarraVida {
 	var property position = game.at(2, 2)
 	const property persona
 
-	method cuantaVida() {
+	method cuanta() {
 		number = 50 - (persona.vida().div(2).roundUp())
 	}
 
@@ -49,7 +49,7 @@ class BarraStamina {
 		return (persona.stamina() * 100 / persona.staminaMax()).roundUp(0)
 	}
 
-	method cuantaStamina() {
+	method cuanta() {
 		number = 50 - (self.porcentaje() / 2)
 	}
 
@@ -57,7 +57,6 @@ class BarraStamina {
 		position = persona.position().right(3)
 		return position
 	}
-
 }
 
 const barraStaminaProta = new BarraStamina(persona = prota)
@@ -69,8 +68,8 @@ object prota {
 
 	var property arma = espada
 	var property monedas = 12
-	var property peso = 65
 	var property stamina = 40
+	var property peso = 54
 	var property staminaMax = 40
 	var property vida = 100
 	var property resistencia = 0
@@ -88,15 +87,6 @@ object prota {
 	var property clave = "Satyr"
 	var property num = "01"
 
-	method mejorarArma() {
-		if (monedas >= 10) {
-			espada.danio(espada.danio() + 6)
-			game.say(checkmark, "Upgraded")
-			self.monedas(self.monedas() - 10)
-		} else{
-			 game.say(checkmark, "Not enough money")
-			 }
-	}
 
 	method earnXp() {
 		self.xp(self.xp() + 40)
@@ -126,22 +116,15 @@ object prota {
 	method recibirDanio(damage) {
 		vida = vida - ((damage - (damage * 0.01 * (self.agilidad() + self.resistencia())))).roundUp(0)
 		if (self.vida() < 0) self.vida(0)
-	}
-
-	method iniciarBarra() {
-		barName.cuantaVida()
-		barName.position(self)
-		numberConverter.getNumberImage(barName.number().toString(), barName)
-		game.addVisual(barName)
-		barStaminaName.cuantaStamina()
-		barStaminaName.position(self)
-		numberConverterStamina.getNumberImage(barStaminaName.number().max(0).toString(), barStaminaName)
-		game.addVisual(barStaminaName)
+		actualizador.actualizarVida(barName)
 	}
 
 	method pelear(enemigo) {
 		var atPer // porcentaje de ataque
 		self.contrincante(enemigo)
+		self.stamina(self.stamina() - 20)
+		actualizador.actualizarStamina(barraStaminaProta)
+		
 		atPer = 0.randomUpTo(100).roundUp()
 		if ((atPer) > (30 + peso ** (1 / 2))) {
 			danio = (arma.danio() + self.fuerza()).roundUp()
@@ -151,33 +134,21 @@ object prota {
 			game.onTick(3800, "restriccion de ataque", {=>
 				turno.atacando(false)
 				game.removeTickEvent("restriccion de ataque")
-			})
-//-------------------------------------Actualizacion de barra de vida-----------------------------------------------------//			
-			game.removeVisual(barraVidaE1)
-			barraVidaE1.cuantaVida()
-			numberConverter.getNumberImage(barraVidaE1.number().max(0).toString(), barraVidaE1)
-			game.addVisual(barraVidaE1)
-//------------------------------------------------------------------------------------------------------------------------//
+			})		
 		} else {
 			accionConjDer.accion()
 			game.onTick(3800, "restriccion de ataque", {=>
 				turno.atacando(false)
 				game.removeTickEvent("restriccion de ataque")
 			})
-			danio = 0
 			game.say(enemigo, "miss")
-			enemigo.recibirDanio(danio)
+
 		}
 	}
 
 	method defender() {
-		self.stamina(self.stamina() + self.staminaMax() / 2)
-			// --------Actualizacion de stamina------------------------------------------------------------//			
-		game.removeVisual(barraStaminaProta)
-		barraStaminaProta.cuantaStamina()
-		numberConverterStamina.getNumberImage(barraStaminaProta.number().max(0).toString(), barraStaminaProta)
-		game.addVisual(barraStaminaProta)
-			// -------------------------------------------------------------------------------------------//
+		self.stamina(self.stamina() + self.staminaMax() / 2)		
+		actualizador.actualizarStamina(barStaminaName)
 		self.resistencia(self.resistencia() + 30)
 		enemigo1.resistencia(0)
 	}
@@ -207,17 +178,7 @@ object enemigo1 {
 	method recibirDanio(damage) {
 		vida = vida - ((damage - (damage * 0.01 * (self.agilidad() + self.resistencia())))).roundUp(0)
 		if (self.vida() < 0) self.vida(0)
-	}
-
-	method iniciarBarra() {
-		barName.cuantaVida()
-		barName.position(self)
-		numberConverter.getNumberImage(barName.number().toString(), barName)
-		game.addVisual(barName)
-		barStaminaName.cuantaStamina()
-		barStaminaName.position(self)
-		numberConverterStamina.getNumberImage(barStaminaName.number().max(0).toString(), barStaminaName)
-		game.addVisual(barStaminaName)
+		actualizador.actualizarVida(barName)
 	}
 
 	method inicializar() {
@@ -228,6 +189,9 @@ object enemigo1 {
 	method pelear() {
 		var atPer // porcentaje de ataque
 		atPer = 0.randomUpTo(100).roundUp()
+		self.stamina(self.stamina() - 20)
+		actualizador.actualizarStamina(barStaminaName)
+		
 		if ((atPer) > (30 + peso ** (1 / 2))) {
 			danio = (arma.danio() + self.fuerza()).roundUp()
 			enemigo.recibirDanio(danio)
@@ -237,12 +201,8 @@ object enemigo1 {
 				turno.atacando(false)
 				game.removeTickEvent("restriccion de ataque")
 			})
-//-------------------------------------actualizacion de barra de vida-----------------------------------------------------//			
-			game.removeVisual(barraVidaProta)
-			barraVidaProta.cuantaVida()
-			numberConverter.getNumberImage(barraVidaProta.number().max(0).toString(), barraVidaProta)
-			game.addVisual(barraVidaProta)
-		} //------------------------------------------------------------------------------------------------------------------------//
+			actualizador.actualizarVida(barraVidaProta)
+		} 
 		else {
 			accionConjizq.accion()
 			game.onTick(4100, "restriccion de ataque", {=>
@@ -253,17 +213,12 @@ object enemigo1 {
 			game.say(enemigo, "miss")
 			enemigo.recibirDanio(danio)
 		}
-		if (enemigo.vida() < 0) game.say(self, "gane")
+		if (enemigo.vida() < 0) game.say(self, "I win")
 	}
 
 	method defender() {
-		self.stamina(self.stamina() + self.staminaMax() / 2)
-			// --------Actualizacion de stamina------------------------------------------------------------//			
-		game.removeVisual(barStaminaName)
-		barraStaminaE1.cuantaStamina()
-		numberConverterStamina.getNumberImage(barStaminaName.number().max(0).toString(), barStaminaName)
-		game.addVisual(barraStaminaE1)
-			// -------------------------------------------------------------------------------------------//
+		self.stamina(self.stamina() + self.staminaMax() / 2)		
+		actualizador.actualizarStamina(barStaminaName)
 		self.resistencia(self.resistencia() + 30)
 		enemigo.resistencia(0)
 	}
@@ -314,5 +269,23 @@ object numberConverterStamina {
 		barraStamina.image("stamina-bar-" + number + "-of-50.png")
 	}
 
+}
+
+object actualizador {
+	method actualizarVida(barra){
+		game.removeVisual(barra)
+		barra.cuanta()
+		numberConverter.getNumberImage(barra.number().max(0).toString(), barra)
+		game.addVisual(barra)
+	}
+	
+	method actualizarStamina(barra){
+		game.removeVisual(barra)
+		barra.cuanta()
+		numberConverterStamina.getNumberImage(barra.number().max(0).toString(), barra)
+		game.addVisual(barra)
+	}
+
+	
 }
 //------------------------------------------------------------------------------------------------------------------------//

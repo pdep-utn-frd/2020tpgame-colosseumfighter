@@ -143,11 +143,22 @@ object tiendaG {
 
 }
 
+object tienda{
+	method mejorarArma() {
+		if (prota.monedas() >= 10) {
+			espada.danio(espada.danio() + 6)
+			game.say(checkmark, "Upgraded")
+			prota.monedas(prota.monedas() - 10)
+		} else{
+			 game.say(checkmark, "Not enough money")
+			 }
+	}
+}
+
 object inicioTienda {
 
 	method iniciar() {
 		game.clear()
-		game.addVisual(tiendaG)
 		self.configurateTienda()
 		self.start()
 	}
@@ -157,6 +168,7 @@ object inicioTienda {
 	}
 
 	method start() {
+		game.addVisual(tiendaG)
 		punteroTienda.position(game.at(2, 12))
 		game.addVisual(cartelT)
 		game.addVisual(punteroTienda)
@@ -189,7 +201,7 @@ object checkmark {
 	var property es = "boton"
 
 	method act() {
-		prota.mejorarArma()
+		tienda.mejorarArma()
 		punteroTienda.position(game.at(10, 12))
 	}
 
@@ -225,53 +237,67 @@ object fightG {
 }
 object inicioPelea {
 
+	method iniciarBarra(char){
+		(char.barName()).cuanta()
+		(char.barName()).position(self)
+		numberConverter.getNumberImage((char.barName()).number().toString(), (char.barName()))
+		game.addVisual((char.barName()))
+		(char.barStaminaName()).cuanta()
+		(char.barStaminaName()).position(self)
+		numberConverterStamina.getNumberImage((char.barStaminaName()).number().max(0).toString(), (char.barStaminaName()))
+		game.addVisual((char.barStaminaName()))
+	}
+	
 	method configurarPelea() {
 		// CONFIGURACI�N DEL JUEGO
 		game.clear()
 		game.addVisual(fightG)
 		game.cellSize(50)
 		prota.stamina(prota.staminaMax())
-			// nuevo enemigo "aleatorio"
+		// nuevo enemigo "aleatorio"
 		creator.newEnem()
 		creator.asign()
-			// Visuales	
+		// Visuales	
 		enemigo1.inicializar()
 		game.addVisual(prota)
-		prota.iniciarBarra()
+		self.iniciarBarra(prota)
 		game.addVisual(enemigo1)
-		enemigo1.iniciarBarra()
-		turno.turnoDe("prota")
+		self.iniciarBarra(enemigo1)
+		turno.turnoDe(prota)
 		turno.turnoProta()
 	}
 
 }
+
 
 object turno {
 
 	var property turnoDe
 	var property atacando = false
 
+	method esTurnoDe(char){
+		return (self.turnoDe() == char)
+	}
+	
+	method puedeAtacar(char) {
+		return ((char.stamina() >= 20) and (self.esTurnoDe(char)))
+	}
+
 	method turnoProta() {
 		var runPer
 		var haveTry = true
 		game.say(prota, "my turn")
+		// intento de escape
 		keyboard.u().onPressDo{ runPer = 0.randomUpTo(100).roundUp()
 			if ((runPer < 70) and (haveTry)) {
 				inicioLobby.inicio()
-				haveTry = true
 			} else game.say(prota, ("miss"))
 			haveTry = false
 		}
-		keyboard.p().onPressDo{ if ((prota.stamina() >= 20) and (self.turnoDe() == "prota") and not atacando) {
+		// atacar
+		keyboard.p().onPressDo{ if (self.puedeAtacar(prota) and not atacando) {
 				atacando = true
 				prota.pelear(enemigo1)
-				prota.stamina(prota.stamina() - 20)
-					// --------Actualizacion de stamina------------------------------------------------------------//			
-				game.removeVisual(barraStaminaProta)
-				barraStaminaProta.cuantaStamina()
-				numberConverterStamina.getNumberImage(barraStaminaProta.number().max(0).toString(), barraStaminaProta)
-				game.addVisual(barraStaminaProta)
-					// -------------------------------------------------------------------------------------------//
 				if (enemigo1.vida() <= 0) {
 					game.onTick(4100, "Ganar", {=>
 						game.say(prota, "I Win")
@@ -281,24 +307,19 @@ object turno {
 				}
 			}
 		}
-		keyboard.o().onPressDo{ if (self.turnoDe() == "prota") {
+		keyboard.o().onPressDo{ if (self.esTurnoDe(prota)) {
 				prota.defender()
 				haveTry = true
-				self.turnoDe("enemigo")
+				self.turnoDe(enemigo1)
 				self.turnoEnem()
 			}
 		}
-		keyboard.i().onPressDo{ if (self.turnoDe() == "prota") {
+		keyboard.i().onPressDo{ if (self.esTurnoDe(prota)) {
 				prota.stamina(prota.staminaMax())
 				haveTry = true
 				enemigo1.resistencia(0)
-					// --------Actualizacion de stamina------------------------------------------------------------//			
-				game.removeVisual(barraStaminaProta)
-				barraStaminaProta.cuantaStamina()
-				numberConverterStamina.getNumberImage(barraStaminaProta.number().max(0).toString(), barraStaminaProta)
-				game.addVisual(barraStaminaProta)
-					// -------------------------------------------------------------------------------------------//
-				self.turnoDe("enemigo")
+				actualizador.actualizarStamina(barraStaminaProta)
+				self.turnoDe(enemigo1)
 				self.turnoEnem()
 			}
 		}
@@ -306,14 +327,7 @@ object turno {
 
 	method turnoEnem() {
 		var defPer
-		if ((enemigo1.stamina() >= 20) and (self.turnoDe() == "enemigo") ) {
-			enemigo1.stamina(enemigo1.stamina() - 20)
-				// --------Actualizacion de stamina------------------------------------------------------------//			
-			game.removeVisual(barraStaminaE1)
-			barraStaminaE1.cuantaStamina()
-			numberConverterStamina.getNumberImage(barraStaminaE1.number().max(0).toString(), barraStaminaE1)
-			game.addVisual(barraStaminaE1)
-				// -------------------------------------------------------------------------------------------// 	
+		if (self.puedeAtacar(enemigo1)){
 			game.onTick(4100, "enemAttack", {=>
 				(if (enemigo1.vida() > 0) {
 					enemigo1.pelear()
@@ -336,27 +350,22 @@ object turno {
 			if (defPer > 50) {
 				enemigo1.defender()
 				game.onTick(4100, "cambioTurno", {=>
-					self.turnoDe("prota")
+					self.turnoDe(prota)
 					game.say(prota, "mi turno")
 					game.removeTickEvent("cambioTurno")
 				})
 			} else {
 				enemigo1.stamina(enemigo1.staminaMax())
-					// --------Actualizacion de stamina------------------------------------------------------------//			
-				game.removeVisual(barraStaminaE1)
-				barraStaminaE1.cuantaStamina()
-				numberConverterStamina.getNumberImage(barraStaminaE1.number().max(0).toString(), barraStaminaE1)
-				game.addVisual(barraStaminaE1)
-					// -------------------------------------------------------------------------------------------//
+				actualizador.actualizarStamina(barraStaminaE1)
 				prota.resistencia(0)
 				game.onTick(4100, "cambioTurno", {=>
-					self.turnoDe("prota")
+					self.turnoDe(prota)
 					game.say(prota, "mi turno")
 					game.removeTickEvent("cambioTurno")
 				})
 			}
 		}
 	}
-
+	
 }
 
