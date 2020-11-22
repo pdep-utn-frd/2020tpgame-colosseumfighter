@@ -32,7 +32,6 @@ object inicioLobby {
 object gameOver {
 
 	method muerte() {
-		game.removeTickEvent("perder")
 		game.clear()
 		game.addVisual(deadG)
 		keyboard.r().onPressDo{ prota.respawn()

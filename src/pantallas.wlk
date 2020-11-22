@@ -299,11 +299,9 @@ object turno {
 				atacando = true
 				prota.pelear(enemigo1)
 				if (enemigo1.vida() <= 0) {
-					game.onTick(4100, "Ganar", {=>
-						game.say(prota, "I Win")
-						prota.monedas(prota.monedas() + 4)
-						prota.earnXp()
-					})
+					game.schedule(4100,{=>  game.say(prota, "I Win")
+											prota.monedas(prota.monedas() + 4)
+											prota.earnXp() })
 				}
 			}
 		}
@@ -328,41 +326,27 @@ object turno {
 	method turnoEnem() {
 		var defPer
 		if (self.puedeAtacar(enemigo1)){
-			game.onTick(4100, "enemAttack", {=>
-				(if (enemigo1.vida() > 0) {
-					enemigo1.pelear()
+			game.schedule(4100,{=>
+				 (if (enemigo1.vida() > 0) {enemigo1.pelear()
 					if (prota.vida() <= 0) {
-						game.onTick(4100, "perder", {=>
-							gameOver.muerte()
-						})
-					}
-				} else {
+						game.schedule(4100,{=> gameOver.muerte() })
+					}}
+				 else {
 					inicioLevelUp.iniciar()
-				} )
-				game.removeTickEvent("enemAttack")
-				game.onTick(4100, "reTurno", {=>
-					self.turnoEnem()
-					game.removeTickEvent("reTurno")
 				})
-			})
-		} else {
-			defPer = 0.randomUpTo(100).roundUp()
-			if (defPer > 50) {
+				game.schedule(4100,{=> self.turnoEnem()})
+				})
+		} 
+		else {  defPer = 0.randomUpTo(100).roundUp()
+				if (defPer > 50) {
 				enemigo1.defender()
-				game.onTick(4100, "cambioTurno", {=>
-					self.turnoDe(prota)
-					game.say(prota, "mi turno")
-					game.removeTickEvent("cambioTurno")
-				})
-			} else {
+				game.schedule(4100,{=> self.turnoDe(prota)  game.say(prota, "mi turno")})
+				}
+			 	else {
 				enemigo1.stamina(enemigo1.staminaMax())
 				actualizador.actualizarStamina(barraStaminaE1)
 				prota.resistencia(0)
-				game.onTick(4100, "cambioTurno", {=>
-					self.turnoDe(prota)
-					game.say(prota, "mi turno")
-					game.removeTickEvent("cambioTurno")
-				})
+				game.schedule(4100,{=> self.turnoDe(prota)  game.say(prota, "mi turno")})
 			}
 		}
 	}

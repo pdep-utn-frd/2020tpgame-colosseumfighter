@@ -93,10 +93,8 @@ object prota {
 		if (self.xp() >= self.nextLvlAt()) {
 			self.xp(self.xp() - self.nextLvlAt())
 			self.nextLvlAt(self.nextLvlAt() * 2)
-			game.removeTickEvent("Ganar")
 			inicioLevelUp.iniciar()
 		} else {
-			game.removeTickEvent("Ganar")
 			inicioLobby.inicio()
 		}
 	}
@@ -131,16 +129,10 @@ object prota {
 			enemigo.recibirDanio(danio)
 			enemigo.position(game.at(24, 2))
 			accionConjDer.accion()
-			game.onTick(3800, "restriccion de ataque", {=>
-				turno.atacando(false)
-				game.removeTickEvent("restriccion de ataque")
-			})		
+			game.schedule(3800, {=>turno.atacando(false)})		
 		} else {
 			accionConjDer.accion()
-			game.onTick(3800, "restriccion de ataque", {=>
-				turno.atacando(false)
-				game.removeTickEvent("restriccion de ataque")
-			})
+			game.schedule(3800, {=>turno.atacando(false)})
 			game.say(enemigo, "miss")
 
 		}
@@ -197,21 +189,13 @@ object enemigo1 {
 			enemigo.recibirDanio(danio)
 			prota.position(game.at(2, 2))
 			accionConjizq.accion()
-			game.onTick(4100, "restriccion de ataque", {=>
-				turno.atacando(false)
-				game.removeTickEvent("restriccion de ataque")
-			})
+			game.schedule(4100, {=>turno.atacando(false)})
 			actualizador.actualizarVida(barraVidaProta)
 		} 
 		else {
 			accionConjizq.accion()
-			game.onTick(4100, "restriccion de ataque", {=>
-				turno.atacando(false)
-				game.removeTickEvent("restriccion de ataque")
-			})
-			danio = 0
+			game.schedule(4100, {=>turno.atacando(false)})
 			game.say(enemigo, "miss")
-			enemigo.recibirDanio(danio)
 		}
 		if (enemigo.vida() < 0) game.say(self, "I win")
 	}
