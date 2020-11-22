@@ -14,6 +14,7 @@ object principal {
 		game.height(altoTotal)
 		game.ground("Celda.png")
 		game.addVisual(fInicio)
+		game.boardGround("fInicio.png")
 		fInicio.teclas()
 	}
 
@@ -28,7 +29,7 @@ object inicioLobby {
 			game.removeVisual(fInicio)
 			self.iniciando(false)
 		}
-		game.addVisual(fLobby)
+		game.boardGround("fLobby.png")
 		fLobby.teclas()
 	}
 
@@ -38,7 +39,8 @@ object gameOver {
 
 	method muerte() {
 		game.removeTickEvent("perder")
-		game.addVisual(deadG)
+		game.clear()
+		game.boardGround("deadG.png")
 		keyboard.r().onPressDo{ prota.respawn()
 			principal.inicio()
 		}
@@ -47,21 +49,11 @@ object gameOver {
 
 }
 
-object deadG {
-
-	var property position = game.at(0, 0)
-
-	method image() = "deadG.png"
-
-}
 
 object fLobby {
 
-	var property position = game.at(0, 0)
-
-	method image() = "fondo1.png"
-
 	method teclas() {
+		game.clear()
 		keyboard.s().onPressDo{ inicioPelea.configurarPelea()}
 		keyboard.d().onPressDo{ inicioTienda.iniciar()
 			game.removeVisual(self)
@@ -71,10 +63,6 @@ object fLobby {
 }
 
 object fInicio {
-
-	var property position = game.at(0, 0)
-
-	method image() = "fInicio.png"
 
 	method teclas() {
 		var iniciado = 0

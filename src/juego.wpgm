@@ -2,7 +2,7 @@ import wollok.game.*
 import pj.*
 import tableros.*
 
-program ejemplo{
+program startGame{
 	principal.inicio()
 	game.start()
 }

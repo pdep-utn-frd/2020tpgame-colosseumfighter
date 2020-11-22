@@ -91,9 +91,11 @@ object prota {
 	method mejorarArma() {
 		if (monedas >= 10) {
 			espada.danio(espada.danio() + 6)
-			game.say(checkmark, "compraste")
+			game.say(checkmark, "Upgraded")
 			self.monedas(self.monedas() - 10)
-		} else punteroTienda.position(game.at(10, 12))
+		} else{
+			 game.say(checkmark, "Not enough money")
+			 }
 	}
 
 	method earnXp() {

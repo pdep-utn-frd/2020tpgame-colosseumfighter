@@ -93,6 +93,7 @@ object enter {
 		fuerzaUp.times(0)
 		agilidadUp.times(0)
 		punteroLvlUp.times(0)
+		game.clear()
 		inicioLobby.inicio()
 	}
 
@@ -145,12 +146,13 @@ object inicioTienda {
 	}
 
 	method configurateTienda() {
+		game.clear()
+		game.boardGround("tiendaG.png")
 		keyboard.enter().onPressDo{ punteroTienda.objetoSeleccionado().act()}
 	}
 
 	method start() {
 		punteroTienda.position(game.at(2, 12))
-		game.addVisual(tiendaG)
 		game.addVisual(cartelT)
 		game.addVisual(punteroTienda)
 		game.addVisual(reload)
@@ -166,11 +168,10 @@ object reload {
 	var property es = "boton"
 
 	method act() {
-		game.removeVisual(tiendaG)
 		game.removeVisual(cartelT)
 		game.removeVisual(punteroTienda)
-		game.removeVisual(self)
 		game.removeVisual(checkmark)
+		game.removeVisual(self)		
 		inicioLobby.inicio()
 	}
 
@@ -208,12 +209,6 @@ object cartelT {
 
 }
 
-object tiendaG {
-
-	var property image = "tiendaG.png"
-	var property position = game.at(0, 0)
-
-}
 
 //------------------------------------------------------Pelea--------------------------------------------------------------//
 object inicioPelea {
@@ -221,7 +216,7 @@ object inicioPelea {
 	method configurarPelea() {
 		// CONFIGURACI�N DEL JUEGO
 		game.clear()
-		game.addVisual(fightG)
+		game.boardGround("fondo1.png")
 		game.ground("celda.png")
 		game.cellSize(50)
 		prota.stamina(prota.staminaMax())
@@ -248,7 +243,7 @@ object turno {
 	method turnoProta() {
 		var runPer
 		var haveTry = true
-		game.say(prota, "mi turno")
+		game.say(prota, "my turn")
 		keyboard.u().onPressDo{ runPer = 0.randomUpTo(100).roundUp()
 			if ((runPer < 70) and (haveTry)) {
 				inicioLobby.inicio()
@@ -268,7 +263,7 @@ object turno {
 					// -------------------------------------------------------------------------------------------//
 				if (enemigo1.vida() <= 0) {
 					game.onTick(4100, "Ganar", {=>
-						game.say(prota, "gane")
+						game.say(prota, "I Win")
 						prota.monedas(prota.monedas() + 4)
 						prota.earnXp()
 					})
@@ -351,14 +346,6 @@ object turno {
 			}
 		}
 	}
-
-}
-
-object fightG {
-
-	var property position = game.at(0, 0)
-
-	method image() = "fondo1.png"
 
 }
 
