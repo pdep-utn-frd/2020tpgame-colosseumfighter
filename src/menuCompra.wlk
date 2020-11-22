@@ -6,7 +6,9 @@ import tableros.*
 object inicioLevelUp {
 
 	method iniciar() {
+		game.clear()
 		game.cellSize(100)
+		game.boardGround("fondo1.png")
 		game.addVisual(levelG)
 		self.start()
 		self.configurateLevelUp()
@@ -109,11 +111,7 @@ object restart {
 		fuerzaUp.times(0)
 		agilidadUp.times(0)
 		punteroLvlUp.times(0)
-		game.removeVisual(self)
-		game.removeVisual(enter)
-		punteroLvlUp.position(game.at(15, 7))
-		game.addVisual(fuerzaUp)
-		game.addVisual(agilidadUp)
+		inicioLevelUp.iniciar()
 	}
 
 }
@@ -138,16 +136,23 @@ object levelG {
 }
 
 //-----------------------------------------------------Tienda--------------------------------------------------------------// 
+object tiendaG {
+
+	var property image = "tiendaG.png"
+	var property position = game.at(0, 0)
+
+}
+
 object inicioTienda {
 
 	method iniciar() {
-		self.start()
+		game.clear()
+		game.addVisual(tiendaG)
 		self.configurateTienda()
+		self.start()
 	}
 
 	method configurateTienda() {
-		game.clear()
-		game.boardGround("tiendaG.png")
 		keyboard.enter().onPressDo{ punteroTienda.objetoSeleccionado().act()}
 	}
 
@@ -211,13 +216,19 @@ object cartelT {
 
 
 //------------------------------------------------------Pelea--------------------------------------------------------------//
+object fightG {
+
+	var property position = game.at(0, 0)
+
+	method image() = "fondo1.png"
+
+}
 object inicioPelea {
 
 	method configurarPelea() {
 		// CONFIGURACI�N DEL JUEGO
 		game.clear()
-		game.boardGround("fondo1.png")
-		game.ground("celda.png")
+		game.addVisual(fightG)
 		game.cellSize(50)
 		prota.stamina(prota.staminaMax())
 			// nuevo enemigo "aleatorio"

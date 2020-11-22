@@ -8,13 +8,12 @@ object principal {
 	const altoTotal = 20
 
 	method inicio() {
-		game.clear()
 		game.title("Colosseum Fighter")
 		game.width(anchoTotal)
 		game.height(altoTotal)
-		game.ground("Celda.png")
+		game.boardGround("fPeleaAlt1.png")
 		game.addVisual(fInicio)
-		game.boardGround("fInicio.png")
+		game.ground("Celda.png")
 		fInicio.teclas()
 	}
 
@@ -22,14 +21,9 @@ object principal {
 
 object inicioLobby {
 
-	var property iniciando = true
-
 	method inicio() {
-		if (iniciando) {
-			game.removeVisual(fInicio)
-			self.iniciando(false)
-		}
-		game.boardGround("fLobby.png")
+		game.clear()
+		game.addVisual(fLobby)
 		fLobby.teclas()
 	}
 
@@ -40,7 +34,7 @@ object gameOver {
 	method muerte() {
 		game.removeTickEvent("perder")
 		game.clear()
-		game.boardGround("deadG.png")
+		game.addVisual(deadG)
 		keyboard.r().onPressDo{ prota.respawn()
 			principal.inicio()
 		}
@@ -51,26 +45,38 @@ object gameOver {
 
 
 object fLobby {
+	
+	var property position = game.at(0, 0)
 
+	method image() = "mainScreen.png"
+	
 	method teclas() {
-		game.clear()
 		keyboard.s().onPressDo{ inicioPelea.configurarPelea()}
-		keyboard.d().onPressDo{ inicioTienda.iniciar()
-			game.removeVisual(self)
-		}
+		keyboard.d().onPressDo{ inicioTienda.iniciar()}
 	}
 
 }
 
 object fInicio {
+	
+var property position = game.at(0, 0)
 
+	method image() = "fInicio.png"
+
+	
 	method teclas() {
-		var iniciado = 0
-		keyboard.enter().onPressDo{ if (iniciado == 0) inicioLobby.inicio()
-			iniciado = 1
-		}
-		keyboard.q().onPressDo{ game.stop()}
+		keyboard.enter().onPressDo{inicioLobby.inicio()}
+		keyboard.q().onPressDo{game.stop()}
 	}
 
 }
+
+object deadG {
+
+	var property position = game.at(0, 0)
+
+	method image() = "deadG.png"
+
+}
+
 
