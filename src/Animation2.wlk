@@ -28,13 +28,15 @@ class Modo {
 		self.moverPersonaje(charact)
 		imageConverter.getNumberImage(charact, charact.num(), descripcion, self.time())
         if (self.time() == pasos) {
-//			imageConverter.getNumberImage(charact, charact.num(), "Walking", 4)
+        	game.removeTickEvent(descripcion)
+			imageConverter.getNumberImage(charact, charact.num(), "Walking", 4)
 			time = final
         }
     }
 
 	method accion(charact) {
-		game.schedule(velocidad,{=> self.accionPersonaje(charact)})
+		game.onTick(velocidad, descripcion, {=> self.accionPersonaje(charact)})
+		
 	}
 	
 	method moverPersonaje(charact){
@@ -80,14 +82,21 @@ class AccionConj{
 	}
 	method accion(){
 		self.caminar()
-		game.schedule(1000, {=>modoAtacar.accion(charact)})
+		game.schedule(750, {=> modoAtacar.accion(charact)})
+//		game.schedule(750, {=> game.removeTickEvent("Walking") modoAtacar.accion(charact)})
 		
 		if (enem.vida() <= 0) {
-			game.schedule(1695, {=>modoDying.accion(enem)})
+			game.schedule(1470, {=> modoDying.accion(enem)})
+//			game.schedule(1470, {=>game.removeTickEvent("Attacking") modoDying.accion(enem)})
 		}else {
-			game.schedule(1695, {=>modoHurt.accion(enem)})
+//			game.schedule(1470, {=>game.removeTickEvent("Attacking") modoHurt.accion(enem)})
+			game.schedule(1470, {=> modoHurt.accion(enem)})
+			
 		}
-		game.schedule(2410,{=> self.volver()})
+		game.schedule(2125,{=> self.volver()})
+//		game.schedule(2125,{=> self.volver() game.removeTickEvent("hurt")})
+		
+//		game.schedule(2775,{=> game.removeTickEvent("Walking")})
 	}
 }
 

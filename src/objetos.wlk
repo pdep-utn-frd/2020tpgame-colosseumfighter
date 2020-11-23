@@ -104,9 +104,9 @@ object prota {
 		self.fuerza(5)
 		self.agilidad(3)
 		self.xp(0)
-		self.stamina(30)
-		self.staminaMax(30)
-		self.monedas(6)
+		self.stamina(40)
+		self.staminaMax(40)
+		self.monedas(12)
 		self.arma(espada)
 		self.vida(100)
 	}
