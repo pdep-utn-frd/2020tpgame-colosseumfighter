@@ -86,7 +86,7 @@ class AccionConj{
 //			
 //		}
 		game.schedule(1470, {=> modoHurt.accion(enem)
-								game.schedule(1470, {=> if (enem.vida() == 0) {modoDying.accion(enem)} })})
+								game.schedule(1400, {=> if (enem.vida() == 0) {modoDying.accion(enem)} })})
 		game.schedule(2125,{=> self.volver()})	
 	}
 }
