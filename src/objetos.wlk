@@ -10,7 +10,7 @@ class Arma {
 	const property peso = 2
 }
 
-const espada = new Arma (danio = 17, peso = 2)
+const espada = new Arma (danio = 50, peso = 2)
 const manos= new Arma (danio = 5, peso= 0)
 const lanza = new Arma(danio = 15, peso =1.5)
 
