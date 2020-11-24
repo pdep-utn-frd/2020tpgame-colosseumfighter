@@ -79,12 +79,14 @@ class AccionConj{
 		self.caminar()
 		game.schedule(750, {=> modoAtacar.accion(charact)})
 		
-		if (enem.vida() <= 0) {
-			game.schedule(1470, {=> modoDying.accion(enem)})
-		}else {
-			game.schedule(1470, {=> modoHurt.accion(enem)})
-			
-		}
+//		if (enem.vida() == 0) {
+//			game.schedule(1470, {=> modoDying.accion(enem)})
+//		}else {
+//			game.schedule(1470, {=> modoHurt.accion(enem)})
+//			
+//		}
+		game.schedule(1470, {=> modoHurt.accion(enem)
+								game.schedule(1470, {=> if (enem.vida() == 0) {modoDying.accion(enem)} })})
 		game.schedule(2125,{=> self.volver()})	
 	}
 }

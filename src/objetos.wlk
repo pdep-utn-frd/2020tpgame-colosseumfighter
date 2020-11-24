@@ -78,7 +78,7 @@ object prota {
 	var danio = 0
 	var property xp = 0
 	var property nextLvlAt = 40
-	var property contrincante
+	var property enemigo = enemigo1
 	var property position = game.at(2, 2)
 	var property barName = barraVidaProta
 	var property barStaminaName = barraStaminaProta
@@ -111,38 +111,23 @@ object prota {
 		self.vida(100)
 	}
 
-	method recibirDanio(damage) {
-		vida = vida - ((damage - (damage * 0.01 * (self.agilidad() + self.resistencia())))).roundUp(0)
-		if (self.vida() < 0) self.vida(0)
-		actualizador.actualizarVida(barName)
-	}
-
-	method pelear(enemigo) {
+	method pelear() {
 		var atPer // porcentaje de ataque
-		self.contrincante(enemigo)
 		self.stamina(self.stamina() - 20)
 		actualizador.actualizarStamina(barraStaminaProta)
-		
+		enemigo.position(game.at(24, 2))
 		atPer = 0.randomUpTo(100).roundUp()
 		if ((atPer) > (30 + peso ** (1 / 2))) {
-			danio = (arma.danio() + self.fuerza()).roundUp()
-			enemigo.recibirDanio(danio)
-			enemigo.position(game.at(24, 2))
 			accionConjDer.accion()
-			game.schedule(3800, {=>turno.atacando(false)})		
+			danio = (arma.danio() + self.fuerza()).roundUp()
+			turno.recibirDanio(danio, enemigo)
+			game.schedule(3800, {=>turno.atacando(false)})
 		} else {
 			accionConjDer.accion()
 			game.schedule(3800, {=>turno.atacando(false)})
 			game.say(enemigo, "miss")
 
 		}
-	}
-
-	method defender() {
-		self.stamina(self.stamina() + self.staminaMax() / 2)		
-		actualizador.actualizarStamina(barStaminaName)
-		self.resistencia(self.resistencia() + 30)
-		enemigo1.resistencia(0)
 	}
 
 }
@@ -167,12 +152,6 @@ object enemigo1 {
 	const property barName = barraVidaE1
 	const property barStaminaName = barraStaminaE1
 
-	method recibirDanio(damage) {
-		vida = vida - ((damage - (damage * 0.01 * (self.agilidad() + self.resistencia())))).roundUp(0)
-		if (self.vida() < 0) self.vida(0)
-		actualizador.actualizarVida(barName)
-	}
-
 	method inicializar() {
 		imageConverter.getNumberImage(self, self.num(), "Walking", 17)
 		self.vida(100)
@@ -181,30 +160,21 @@ object enemigo1 {
 	method pelear() {
 		var atPer // porcentaje de ataque
 		atPer = 0.randomUpTo(100).roundUp()
+		prota.position(game.at(2, 2))
 		self.stamina(self.stamina() - 20)
 		actualizador.actualizarStamina(barStaminaName)
 		
 		if ((atPer) > (30 + peso ** (1 / 2))) {
-			danio = (arma.danio() + self.fuerza()).roundUp()
-			enemigo.recibirDanio(danio)
-			prota.position(game.at(2, 2))
 			accionConjizq.accion()
+			danio = (arma.danio() + self.fuerza()).roundUp()
+			turno.recibirDanio(danio, enemigo)
 			game.schedule(4100, {=>turno.atacando(false)})
-			actualizador.actualizarVida(barraVidaProta)
 		} 
 		else {
 			accionConjizq.accion()
 			game.schedule(4100, {=>turno.atacando(false)})
 			game.say(enemigo, "miss")
 		}
-		if (enemigo.vida() < 0) game.say(self, "I win")
-	}
-
-	method defender() {
-		self.stamina(self.stamina() + self.staminaMax() / 2)		
-		actualizador.actualizarStamina(barStaminaName)
-		self.resistencia(self.resistencia() + 30)
-		enemigo.resistencia(0)
 	}
 
 }
