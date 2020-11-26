@@ -24,6 +24,8 @@ Tu primera opcion es atacar al enemigo (presionando P):
 
 Al quedarte sin stamina tus unicas alternativas son defenderte (defence) o descansar (Sleep). Ambas ceden el turno a tu enemigo. Defenderte te regenera la mitad de tu energia pero te otorga un escudo que repele un porcentaje del daño que recibas en el turno del enemigo, descansar te otorga el 100% de tu energia pero recibiras la totalidad del daño que te haga el enemigo durante su turno. (durante el turno de tu enemigo no seras capas de atacarlo asi como el tampoco te atacara durante tu turno).
 
+![](https://github.com/pdep-utn-frd/2020tpgame-colosseumfighter/blob/master/assets%20Miselaneos/Colosseum7.gif)
+
 Cuando derrotas a tu enemigo, ganas experiencia y monedas de oro. Cuando alcanzas la experiencia suficiente para subir de nivel, se te llevara a la interfaz de "LevelUp"
 
 ![](https://github.com/pdep-utn-frd/2020tpgame-colosseumfighter/blob/master/assets%20Miselaneos/Colosseum4.gif)
