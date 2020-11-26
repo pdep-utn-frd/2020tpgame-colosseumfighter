@@ -1,0 +1,8 @@
+import wollok.game.*
+import objetos.*
+import fondos.*
+
+program startGame{
+	principal.inicio()
+	game.start()
+}
