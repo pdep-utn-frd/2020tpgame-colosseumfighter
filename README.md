@@ -28,7 +28,7 @@ Al salir victorioso de un enfrentamiento obtendras monedas, las cuales puedes ga
 ![]("colosseum3.mp4")
 
 Pero no siempre se puede ganar. En caso de que mueras en combate, solo te queda volver a intentarlo.
-![]("Colosseum5.mp4")
+![](https://github.com/pdep-utn-frd/2020tpgame-colosseumfighter/blob/master/assets%20Miselaneos/Colossem5.gif)
 
 
 
