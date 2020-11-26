@@ -29,12 +29,6 @@ object inicioLevelUp {
 		keyboard.j().onPressDo{ game.say(punteroLvlUp, prota.agilidad().toString())}
 	}
 
-	method clean() {
-		game.removeVisual(fuerzaUp)
-		game.removeVisual(agilidadUp)
-		game.removeVisual(punteroLvlUp)
-	}
-
 	method start() {
 		punteroLvlUp.position(game.at(15, 7))
 		game.addVisual(fuerzaUp)
@@ -52,7 +46,6 @@ object inicioLevelUp {
 			game.addVisual(restart)
 		}
 	}
-
 }
 
 object fuerzaUp {
@@ -238,13 +231,9 @@ object fightG {
 object inicioPelea {
 
 	method iniciarBarra(char){
-		(char.barName()).cuanta()
 		(char.barName()).position(char.position())
-		numberConverter.getNumberImage((char.barName()).number().toString(), (char.barName()))
 		game.addVisual((char.barName()))
-		(char.barStaminaName()).cuanta()
 		(char.barStaminaName()).position(char.position())
-		numberConverterStamina.getNumberImage((char.barStaminaName()).number().max(0).toString(), (char.barStaminaName()))
 		game.addVisual((char.barStaminaName()))
 	}
 	
@@ -259,6 +248,7 @@ object inicioPelea {
 		creator.asign()
 		// Visuales	
 		enemigo1.inicializar()
+		prota.position(game.at(2, 2))
 		game.addVisual(prota)
 		self.iniciarBarra(prota)
 		game.addVisual(enemigo1)
@@ -285,7 +275,6 @@ object turno {
 	
 	method defenderse(char, enem) {
 		char.stamina(char.stamina() + char.staminaMax() / 2)		
-		actualizador.actualizarStamina(char.barStaminaName())
 		char.resistencia(char.resistencia() + 30)
 		enem.resistencia(0)
 	}
@@ -293,7 +282,6 @@ object turno {
 	method recibirDanio(damage, char) {
 		char.vida(char.vida() - ((damage - (damage * 0.01 * (char.agilidad() + char.resistencia())))).roundUp(0))
 		if (char.vida() < 0) char.vida(0)
-		game.schedule(1500, {=>actualizador.actualizarVida(char.barName())})
 		}
 	
 	
@@ -311,9 +299,10 @@ object turno {
 		// atacar
 		keyboard.p().onPressDo{ if (self.puedeAtacar(prota) and not atacando) {
 				atacando = true
+				(prota.enemigo()).position(game.at(24, 2))
 				prota.pelear()
-				game.schedule(1500, {=> if ((prota.enemigo()).vida() == 0) {
-					game.schedule(4100,{=>  game.say(prota, "I Win")
+				game.schedule(1500, { if ((prota.enemigo()).vida() == 0) {
+					game.schedule(2500,{game.say(prota, "I Win")
 											prota.monedas(prota.monedas() + 4)
 											prota.earnXp() })
 				}})
@@ -330,7 +319,6 @@ object turno {
 				prota.stamina(prota.staminaMax())
 				haveTry = true
 				enemigo1.resistencia(0)
-				actualizador.actualizarStamina(prota.barStaminaName())
 				self.turnoDe(prota.enemigo())
 				self.turnoEnem()
 			}
@@ -339,21 +327,25 @@ object turno {
 
 	method turnoEnem() {
 		var defPer
+		prota.position(game.at(2, 2))
 		if (self.puedeAtacar(enemigo1)){
-			game.schedule(4100,{=>
+			game.schedule(3800,{
 					enemigo1.pelear()
-					game.schedule(1500, {=> if (prota.vida() == 0) {game.schedule(4100,{=> gameOver.muerte()})} })
-					game.schedule(4100,{=> self.turnoEnem()}) })}
+					game.schedule(1500, {if (prota.vida() == 0) {game.schedule(2500,{ gameOver.muerte()})} })
+					self.turnoEnem()
+//					game.schedule(2500,{self.turnoEnem()})
+					 })}
 		else {	defPer = 0.randomUpTo(100).roundUp()
 				if (defPer > 50) {
 					self.defenderse(enemigo1, prota)
-					game.schedule(4100,{=> self.turnoDe(enemigo1.enemigo()) game.say(enemigo1.enemigo(), "my turn") })
+					self.turnoDe(enemigo1.enemigo()) game.say(enemigo1.enemigo(), "my turn")
+					//game.schedule(2500,{self.turnoDe(enemigo1.enemigo()) game.say(enemigo1.enemigo(), "my turn") })
 				}
 			 	else {
 					enemigo1.stamina(enemigo1.staminaMax())
-					actualizador.actualizarStamina(enemigo1.barStaminaName())
 					prota.resistencia(0)
-					game.schedule(4100,{=> self.turnoDe(enemigo1.enemigo()) game.say(enemigo1.enemigo(), "my turn") })
+					self.turnoDe(enemigo1.enemigo()) game.say(enemigo1.enemigo(), "my turn")
+					//game.schedule(4100,{self.turnoDe(enemigo1.enemigo()) game.say(enemigo1.enemigo(), "my turn") })
 				}
 		}
 	}

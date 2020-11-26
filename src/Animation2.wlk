@@ -25,11 +25,11 @@ class Modo {
 	
     method accionPersonaje(charact){
 		self.moverPersonaje(charact)
-		imageConverter.getNumberImage(charact, charact.num(), descripcion, self.time())
+		imageConverter.getNumberImage(charact, charact.num(), descripcion, (self.time().toString()))
         if (self.time() == pasos) {
         	game.removeTickEvent(descripcion)
         	if (descripcion != "dying"){
-				imageConverter.getNumberImage(charact, charact.num(), "Walking", 4)}
+				imageConverter.getNumberImage(charact, charact.num(), "Walking", "4")}
 			time = final
         }
     }
@@ -77,17 +77,18 @@ class AccionConj{
 	}
 	method accion(){
 		self.caminar()
-		game.schedule(750, {=> modoAtacar.accion(charact)})
+		game.schedule(660, { modoAtacar.accion(charact)})
 		
-//		if (enem.vida() == 0) {
-//			game.schedule(1470, {=> modoDying.accion(enem)})
-//		}else {
-//			game.schedule(1470, {=> modoHurt.accion(enem)})
-//			
-//		}
-		game.schedule(1470, {=> modoHurt.accion(enem)
-								game.schedule(1400, {=> if (enem.vida() == 0) {modoDying.accion(enem)} })})
-		game.schedule(2125,{=> self.volver()})	
+		game.schedule(1250, { modoHurt.accion(enem)
+								game.schedule(980, { if (enem.vida() == 0) {modoDying.accion(enem)} })})
+		game.schedule(1580,{ self.volver()})	
+	}
+}
+
+object imageConverter {
+
+	method getNumberImage(pj, num, accion, time) {
+		pj.image(pj.clave() + "_" + num + "_" + accion + "_" + time + ".png")
 	}
 }
 

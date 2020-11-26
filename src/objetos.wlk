@@ -6,13 +6,13 @@ import fondos.*
 //--------------------------------------------------Armas----------------------------------------------------------//
 
 class Arma {
-	var property danio = 10
-	const property peso = 2
+	var property danio 
+	const property peso 
 }
 
-const espada = new Arma (danio = 50, peso = 2)
-const manos= new Arma (danio = 5, peso= 0)
-const lanza = new Arma(danio = 15, peso =1.5)
+const espada = new Arma (danio = 24, peso = 2)
+const manos= new Arma (danio = 10, peso= 0)
+const lanza = new Arma(danio = 20, peso =1.5)
 
 //--------------------------------------------------visuales-vida----------------------------------------------------------//
 class BarraVida {
@@ -23,14 +23,17 @@ class BarraVida {
 	const property persona
 
 	method cuanta() {
-		number = 50 - (persona.vida().div(2).roundUp())
+		return (50 - (persona.vida().div(2).roundUp())).toString()
 	}
 
 	method position() {
 		position = persona.position().right(3).up(1)
 		return position
 	}
-
+	method image() {
+		return ("hp bar " + (self.cuanta()) + " of 50.png")
+		 
+	}
 }
 
 const barraVidaProta = new BarraVida(persona = prota)
@@ -50,12 +53,16 @@ class BarraStamina {
 	}
 
 	method cuanta() {
-		number = 50 - (self.porcentaje() / 2)
+		return ((50 - (self.porcentaje() / 2))).toString()
 	}
 
 	method position() {
 		position = persona.position().right(3)
 		return position
+	}
+	method image(){
+		return "stamina-bar-" + (self.cuanta()) + "-of-50.png"
+		
 	}
 }
 
@@ -63,31 +70,65 @@ const barraStaminaProta = new BarraStamina(persona = prota)
 
 const barraStaminaE1 = new BarraStamina(persona = enemigo1)
 
-//------------------------------------------------------------------------------------------------------------------------//
-object prota {
+//----------------------------------------------------Personajes----------------------------------------------------------//
+class Fighter{
+	var property arma 
+	var property vida 
+	var property stamina 
+	var property staminaMax 
+	var property resistencia 
+	var property fuerza 
+	var property agilidad 
+	var danio 
+	var property position
+	const peso 
+	const property enemigo 
+	var property clave 
+	var property num 
+	var property image 
+	const property barName
+	const property barStaminaName 
 
-	var property arma = espada
-	var property monedas = 12
-	var property stamina = 40
-	var property peso = 54
-	var property staminaMax = 40
-	var property vida = 100
-	var property resistencia = 0
-	var property fuerza = 5
-	var property agilidad = 3
-	var danio = 0
+
+	method accionConjunta(){
+		accionConjizq.accion()
+	}
+	
+	method pelear() {
+		var atPer // porcentaje de ataque
+		atPer = 0.randomUpTo(100).roundUp()
+		self.stamina(self.stamina() - 20)
+		
+		if ((atPer) > (30 + peso ** (1 / 2))) {
+			self.accionConjunta()
+			danio = (arma.danio() + self.fuerza()).roundUp()
+			turno.recibirDanio(danio, enemigo)
+			game.schedule(4100, {turno.atacando(false)})
+		} 
+		else {
+			self.accionConjunta()
+			game.schedule(4100, {turno.atacando(false)})
+			game.say(enemigo, "miss")
+		}
+	}
+}
+
+
+
+object enemigo1 inherits Fighter(arma = espada, vida = 100, stamina = 40, staminaMax = 40, resistencia = 0, fuerza = 5, agilidad = 3, danio = 0, position = game.at(24, 2), peso = 67, enemigo = prota,
+								 clave = "Satyr", num = "02", image = "Satyr_02_Attacking_0.png", barName = barraVidaE1, barStaminaName = barraStaminaE1){
+	method inicializar() {
+		imageConverter.getNumberImage(self, self.num(), "Walking", "17")
+		self.vida(100)
+	}
+}
+
+object prota inherits Fighter(arma = espada, vida = 100, stamina = 40, staminaMax = 40, resistencia = 0, fuerza = 5, agilidad = 3, danio = 0, position = game.at(2, 2), peso = 54, enemigo = enemigo1,
+								 clave = "Satyr", num = "01", image = "Satyr_01_Attacking_0.png", barName = barraVidaProta, barStaminaName = barraStaminaProta){
 	var property xp = 0
 	var property nextLvlAt = 40
-	var property enemigo = enemigo1
-	var property position = game.at(2, 2)
-	var property barName = barraVidaProta
-	var property barStaminaName = barraStaminaProta
-	// Image converter 	
-	var property image = "Satyr_01_Attacking_0.png"
-	var property clave = "Satyr"
-	var property num = "01"
-
-
+	var property monedas = 12
+	
 	method earnXp() {
 		self.xp(self.xp() + 40)
 		if (self.xp() >= self.nextLvlAt()) {
@@ -98,7 +139,7 @@ object prota {
 			inicioLobby.inicio()
 		}
 	}
-
+	
 	method respawn() {
 		self.nextLvlAt(40)
 		self.fuerza(5)
@@ -110,73 +151,10 @@ object prota {
 		self.arma(espada)
 		self.vida(100)
 	}
-
-	method pelear() {
-		var atPer // porcentaje de ataque
-		self.stamina(self.stamina() - 20)
-		actualizador.actualizarStamina(barraStaminaProta)
-		enemigo.position(game.at(24, 2))
-		atPer = 0.randomUpTo(100).roundUp()
-		if ((atPer) > (30 + peso ** (1 / 2))) {
-			accionConjDer.accion()
-			danio = (arma.danio() + self.fuerza()).roundUp()
-			turno.recibirDanio(danio, enemigo)
-			game.schedule(3800, {=>turno.atacando(false)})
-		} else {
-			accionConjDer.accion()
-			game.schedule(3800, {=>turno.atacando(false)})
-			game.say(enemigo, "miss")
-
-		}
+	
+	override method accionConjunta(){
+		accionConjDer.accion()
 	}
-
-}
-
-//------------------------------------------------------------------------------------------------------------------------//
-object enemigo1 {
-
-	var property arma = espada
-	var property vida = 100
-	var property stamina = 40
-	var property staminaMax = 40
-	var property resistencia = 0
-	const property fuerza = 5
-	const property agilidad = 3
-	var danio = 0
-	var property position = game.at(24, 2)
-	const peso = 67
-	const property enemigo = prota
-	var property clave = "Satyr"
-	var property num = "02"
-	var property image = "Satyr_02_Attacking_0.png"
-	const property barName = barraVidaE1
-	const property barStaminaName = barraStaminaE1
-
-	method inicializar() {
-		imageConverter.getNumberImage(self, self.num(), "Walking", 17)
-		self.vida(100)
-	}
-
-	method pelear() {
-		var atPer // porcentaje de ataque
-		atPer = 0.randomUpTo(100).roundUp()
-		prota.position(game.at(2, 2))
-		self.stamina(self.stamina() - 20)
-		actualizador.actualizarStamina(barStaminaName)
-		
-		if ((atPer) > (30 + peso ** (1 / 2))) {
-			accionConjizq.accion()
-			danio = (arma.danio() + self.fuerza()).roundUp()
-			turno.recibirDanio(danio, enemigo)
-			game.schedule(4100, {=>turno.atacando(false)})
-		} 
-		else {
-			accionConjizq.accion()
-			game.schedule(4100, {=>turno.atacando(false)})
-			game.say(enemigo, "miss")
-		}
-	}
-
 }
 //-----------------------------------------------------------------------------------------------------------------------//
 object creator {
@@ -190,56 +168,11 @@ object creator {
 		self.num([ "02", "03" ].anyOne())
 		self.arma([ espada, lanza, manos ].anyOne())
 	}
-
 	method asign() {
 		enemigo1.arma(self.arma())
 		enemigo1.clave(self.clave())
 		enemigo1.num(self.num())
 	}
-
-}
-
-
-//------------------------------------------------------------------------------------------------------------------------//
-object imageConverter {
-
-	method getNumberImage(pj, num, accion, time) {
-		pj.image(pj.clave() + "_" + num + "_" + accion + "_" + time + ".png")
-	}
-
-}
-
-object numberConverter {
-
-	method getNumberImage(number, barraVida) {
-		barraVida.image("hp bar " + number + " of 50.png")
-	}
-
-}
-
-object numberConverterStamina {
-
-	method getNumberImage(number, barraStamina) {
-		barraStamina.image("stamina-bar-" + number + "-of-50.png")
-	}
-
-}
-
-object actualizador {
-	method actualizarVida(barra){
-		game.removeVisual(barra)
-		barra.cuanta()
-		numberConverter.getNumberImage(barra.number().max(0).toString(), barra)
-		game.addVisual(barra)
-	}
-	
-	method actualizarStamina(barra){
-		game.removeVisual(barra)
-		barra.cuanta()
-		numberConverterStamina.getNumberImage(barra.number().max(0).toString(), barra)
-		game.addVisual(barra)
-	}
-
-	
 }
 //------------------------------------------------------------------------------------------------------------------------//
+
