@@ -46,13 +46,11 @@ Pero no siempre se puede ganar. En caso de que mueras en combate, solo te queda 
 
 ### Acerca de:
 
-Autor: Leonardo Laniere
+Autor: Leonardo Daniel Laniere Motta
 
 Docente/Curso/Institución: Lucas Espigariol, Juan Bono / 2° año Ingenieria en Sistemas / UTN FRD
 
 Versión de wollok: 2.0.2
 
 Fecha: 28/11/2020
-
-[Guía de herramientas](https://www.wollok.org/documentacion/conceptos/)
 
